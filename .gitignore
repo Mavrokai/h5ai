@@ -1,0 +1,20 @@
+# Dossier de compilation
+/target/
+
+# Fichiers de dépendances
+Cargo.lock
+
+# Fichiers d'environnement
+.env
+.env.local
+
+# Fichiers d'IDE et éditeurs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Fichiers système
+.DS_Store
+Thumbs.db 
