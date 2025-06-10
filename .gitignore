@@ -1,8 +1,6 @@
 # Dossier de compilation
 /target/
 
-# Fichiers de dépendances
-Cargo.lock
 
 # Fichiers d'environnement
 .env
