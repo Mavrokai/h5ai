@@ -17,6 +17,9 @@
           {% for item in items %}
           <li class="file-item">
             <a href="{{ item.path }}">{{ item.name }}</a>
+            <span class="last-modified"
+              >dernière modification le : {{ item.last_modified }}</span
+            >
             {% if item.is_dir %}
             <span>📁</span>
             {% else %}

@@ -4,8 +4,6 @@ use std::fs;
 use std::path::PathBuf;
 use crate::models::file_item::FileItem;
 
-
-
 // liste contenu du dossier
 pub fn list_directory_contents(path: &str, base_path: &str) -> std::io::Result<Vec<FileItem>> {
     let full_path = PathBuf::from(base_path).join(path.trim_start_matches('/'));
@@ -17,15 +15,18 @@ pub fn list_directory_contents(path: &str, base_path: &str) -> std::io::Result<V
         let path = entry.path();
         let name = path.file_name().unwrap().to_string_lossy().to_string();
         let is_dir = path.is_dir();
+
+        let last_modified = fs::metadata(&path)?.modified()?;
         
         let relative_path = path.strip_prefix(base_path).unwrap();
         let web_path = format!("/{}", relative_path.to_string_lossy());
         
-        items.push(FileItem {
+        items.push(FileItem::new(
             name,
-            path: web_path,
+            web_path,
             is_dir,
-        });
+            last_modified,
+        ));
     }
     
     items.sort_by(|a, b| {
