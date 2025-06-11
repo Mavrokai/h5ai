@@ -45,6 +45,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(move || handlers::file_handlers::index(Arc::clone(&chemin_clone))))
         .route("/{*path}", get(move |path| handlers::file_handlers::directory_handler(path, Arc::clone(&chemin))))
+        .nest_service("/static", ServeDir::new("static"))
         .fallback_service(ServeDir::new(&*chemin_clone2).append_index_html_on_directories(true));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
