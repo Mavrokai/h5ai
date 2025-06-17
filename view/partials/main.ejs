@@ -1,0 +1,22 @@
+<div class="explorer-container">
+  <div class="current-path">
+    <span>Chemin courant : <%= currentPath %></span>
+  </div>
+  <ul class="file-list">
+    <% files.forEach(function(item) { %> <% if (item.isDirectory) { %>
+    <li class="file-item">
+      <a href="<%= item.path %>" class="folder-link">
+        <span class="folder-icon">📁</span>
+        <%= item.name %>
+      </a>
+    </li>
+    <% } else { %>
+    <li class="file-item">
+      <span class="file-name">
+        <span class="file-icon">📄</span>
+        <%= item.name %>
+      </span>
+    </li>
+    <% } %> <% }); %>
+  </ul>
+</div>
