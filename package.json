@@ -1,0 +1,26 @@
+{
+  "name": "w-web-502-lil-2-1-h5ai-valentin.verscheure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EpitechWebAcademiePromo2026/W-WEB-502-LIL-2-1-H5AI-valentin.verscheure.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/EpitechWebAcademiePromo2026/W-WEB-502-LIL-2-1-H5AI-valentin.verscheure/issues"
+  },
+  "homepage": "https://github.com/EpitechWebAcademiePromo2026/W-WEB-502-LIL-2-1-H5AI-valentin.verscheure#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}

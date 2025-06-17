@@ -1,18 +1,2 @@
-# Dossier de compilation
-/target/
-
-
-# Fichiers d'environnement
+node_modules
 .env
-.env.local
-
-# Fichiers d'IDE et éditeurs
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# Fichiers système
-.DS_Store
-Thumbs.db 

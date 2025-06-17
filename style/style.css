@@ -1,0 +1,128 @@
+.header-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #005571;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.file-tree {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+.item {
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.item:hover {
+  background-color: #e9ecef;
+}
+
+.directory {
+  font-weight: bold;
+  color: #005571;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.directory:hover {
+  background-color: #e9ecef;
+  color: #003d4f;
+}
+
+.file {
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-info {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-left: 8px;
+  font-weight: normal;
+}
+
+.item {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.item:hover {
+  transform: translateX(5px);
+}
+
+.hidden {
+  display: none;
+}
+
+.children {
+  margin-left: 20px;
+  transition: all 0.3s ease;
+}
+
+.folder-icon,
+.file-icon {
+  font-size: 1.2rem;
+  min-width: 24px;
+}
+
+.breadcrumb {
+  background-color: #f8f9fa;
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.breadcrumb-item {
+  color: #005571;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb-item:hover {
+  color: #003d4f;
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  color: #6c757d;
+  font-weight: bold;
+}
+
+.current-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.directory {
+  text-decoration: none;
+  color: inherit;
+}
+
+.parent-dir {
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.parent-dir:hover {
+  color: #495057;
+}
