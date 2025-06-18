@@ -16,27 +16,41 @@
     <tbody>
       <% files.forEach(function(item) { %>
         <tr>
-          <td class="icon-cell">
-            <% if (item.isDirectory) { %>
-              <a href="<%= item.path %>">📁</a>
-            <% } else { %>
-              <%
-                const ext = item.extension;
-                let icon = '📦'; // icône par défaut
+<td class="icon-cell">
+  <% if (item.isDirectory) { %>
+    <a href="<%= item.path %>">
+      <iconify-icon icon="mdi:folder" width="24"></iconify-icon>
+    </a>
+  <% } else { %>
+    <%
+      const ext = item.extension.toLowerCase();
 
-                if (ext === '.txt') icon = '📝';
-                else if (ext === '.pdf') icon = '📄';
-                else if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) icon = '🖼️';
-                else if (['.mp4', '.mov', '.avi'].includes(ext)) icon = '🎬';
-              %>
-              <a href="<%= item.path %>"><%= icon %></a>
-            <% } %>
-          </td>
+      let icon = 'mdi:file-outline';
+
+      if (ext === '.pdf') icon = 'mdi:file-pdf-box';
+      else if (ext === '.doc' || ext === '.docx') icon = 'mdi:file-word-box';
+      else if (ext === '.xls' || ext === '.xlsx') icon = 'mdi:file-excel-box';
+      else if (ext === '.ppt' || ext === '.pptx') icon = 'mdi:file-powerpoint-box';
+      else if (ext === '.html') icon = 'vscode-icons:file-type-html';
+      else if (ext === '.css') icon = 'vscode-icons:file-type-css';
+      else if (ext === '.js') icon = 'vscode-icons:file-type-js-official';
+      else if (['.jpg', '.jpeg', '.png', '.gif', '.svg'].includes(ext)) icon = 'mdi:file-image';
+      else if (['.mp4', '.mov', '.webm'].includes(ext)) icon = 'mdi:file-video';
+      else if (['.mp3', '.wav'].includes(ext)) icon = 'mdi:file-music';
+      else if (['.zip', '.rar', '.7z'].includes(ext)) icon = 'mdi:folder-zip';
+    %>
+
+    <a href="<%= item.path %>">
+      <iconify-icon icon="<%= icon %>" width="24"></iconify-icon>
+    </a>
+  <% } %>
+</td>
+
           <td class="name-cell">
             <a href="<%= item.path %>"><%= item.name %></a>
           </td>
           <td class="size-cell">
-            <%= item.isDirectory ? '-' : (Math.round(item.size / 1024) + ' KB') %>
+            <%= item.formattedSize %>
           </td>
         </tr>
       <% }); %>
