@@ -5,42 +5,41 @@
     </div>
   </section>
 
-  <div>
-    <span>Nom</span>
-    <span>Type</span>
-    <span>Date</span>
-    <span>Taille</span>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Nom</th>
+        <th>Taille</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% files.forEach(function(item) { %>
+        <tr>
+          <td class="icon-cell">
+            <% if (item.isDirectory) { %>
+              <a href="<%= item.path %>">📁</a>
+            <% } else { %>
+              <%
+                const ext = item.extension;
+                let icon = '📦'; // icône par défaut
 
-  <ul class="file-list">
-    <% files.forEach(function(item) { %>
-      <% if (item.isDirectory) { %>
-        <li class="file-item">
-          <a href="<%= item.path %>" class="folder-link">
-            <span class="folder-icon">📁</span>
-            <%= item.name %>
-          </a>
-        </li>
-      <% } else { %>
-        <li class="file-item">
-          <span class="file-name">
-            <span class="file-icon">
-              <% if (item.extension === '.txt') { %>
-                📝
-              <% } else if (item.extension === '.pdf') { %>
-                📄
-              <% } else if (item.extension === '.jpg' || item.extension === '.jpeg' || item.extension === '.png') { %>
-                🖼️
-              <% } else if (item.extension === '.mp4') { %>
-                🎬
-              <% } else { %>
-                📦
-              <% } %>
-            </span>
-            <%= item.name %>
-          </span>
-        </li>
-      <% } %>
-    <% }); %>
-  </ul>
+                if (ext === '.txt') icon = '📝';
+                else if (ext === '.pdf') icon = '📄';
+                else if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) icon = '🖼️';
+                else if (['.mp4', '.mov', '.avi'].includes(ext)) icon = '🎬';
+              %>
+              <a href="<%= item.path %>"><%= icon %></a>
+            <% } %>
+          </td>
+          <td class="name-cell">
+            <a href="<%= item.path %>"><%= item.name %></a>
+          </td>
+          <td class="size-cell">
+            <%= item.isDirectory ? '-' : (Math.round(item.size / 1024) + ' KB') %>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
 </div>
