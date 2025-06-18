@@ -18,7 +18,6 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   const relPath = "";
   const absPath = path.join(rootPath, relPath);
-
   fs.stat(absPath, (err, stats) => {
     if (err) {
       return res.status(404).send("Fichier ou dossier introuvable");
@@ -28,11 +27,19 @@ app.get("/", (req, res) => {
         if (err) {
           return res.status(500).send("Erreur de lecture du dossier");
         }
-        const files = entries.map((entry) => ({
-          name: entry.name,
-          path: path.join(relPath, entry.name),
-          isDirectory: entry.isDirectory(),
-        }));
+const files = entries.map((entry) => {
+  const fileName = entry.name;
+  const filePath = path.join(relPath, fileName);
+  const isDir = entry.isDirectory();
+
+  return {
+    name: fileName,
+    path: filePath,
+    isDirectory: isDir,
+    extension: isDir ? '' : path.extname(fileName).toLowerCase()
+  };
+});
+
         res.render("index", {
           files,
           currentPath: "/",
