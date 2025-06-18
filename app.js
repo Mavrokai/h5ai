@@ -14,15 +14,12 @@ app.use("/script", express.static(path.join(__dirname, "script")));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/style", express.static(path.join(__dirname, "style")));
 
-app.set("views", path.join(__dirname, "view"));
-app.set("view engine", "ejs");
-
+app.set("views", path.join(__dirname, "view"));            
 app.get("/api/tree", (req, res) => {
   const relPath = req.query.path || "";
   RecMain.getTree(rootPath, relPath, (err, tree) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(tree);
-  });
+    if (err) return res.status(500).json({ error: err.message })
+    
 });
 
 app.get("/", (req, res) => {

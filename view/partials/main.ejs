@@ -13,20 +13,34 @@
   </div>
 
   <ul class="file-list">
-    <% files.forEach(function(item) { %> <% if (item.isDirectory) { %>
-    <li class="file-item">
-      <a href="<%= item.path %>" class="folder-link">
-        <span class="folder-icon">📁</span>
-        <%= item.name %>
-      </a>
-    </li>
-    <% } else { %>
-    <li class="file-item">
-      <span class="file-name">
-        <span class="file-icon">📄</span>
-        <%= item.name %>
-      </span>
-    </li>
-    <% } %> <% }); %>
+    <% files.forEach(function(item) { %>
+      <% if (item.isDirectory) { %>
+        <li class="file-item">
+          <a href="<%= item.path %>" class="folder-link">
+            <span class="folder-icon">📁</span>
+            <%= item.name %>
+          </a>
+        </li>
+      <% } else { %>
+        <li class="file-item">
+          <span class="file-name">
+            <span class="file-icon">
+              <% if (item.extension === '.txt') { %>
+                📝
+              <% } else if (item.extension === '.pdf') { %>
+                📄
+              <% } else if (item.extension === '.jpg' || item.extension === '.jpeg' || item.extension === '.png') { %>
+                🖼️
+              <% } else if (item.extension === '.mp4') { %>
+                🎬
+              <% } else { %>
+                📦
+              <% } %>
+            </span>
+            <%= item.name %>
+          </span>
+        </li>
+      <% } %>
+    <% }); %>
   </ul>
 </div>
