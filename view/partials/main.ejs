@@ -1,7 +1,17 @@
 <div class="explorer-container">
-  <div class="current-path">
-    <span>Chemin courant : <%= currentPath %></span>
+  <section class="current-path">
+    <div>
+      <span>Chemin courant : <%= currentPath %></span>
+    </div>
+  </section>
+
+  <div>
+    <span>Nom</span>
+    <span>Type</span>
+    <span>Date</span>
+    <span>Taille</span>
   </div>
+
   <ul class="file-list">
     <% files.forEach(function(item) { %> <% if (item.isDirectory) { %>
     <li class="file-item">
