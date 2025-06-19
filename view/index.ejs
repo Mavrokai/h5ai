@@ -3,14 +3,11 @@
   <head>
     <%- include("./partials/head.ejs"); %>
     <link rel="stylesheet" href="/style/style.css" />
-<script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
-
-
-
+    <script src="https://code.iconify.design/iconify-icon/3.0.0/iconify-icon.min.js"></script>
   </head>
   <body>
     <header><%- include("./partials/header.ejs"); %></header>
-    <aside><%- include("./partials/tree.ejs"); %></aside>
+    <aside><%- include("./partials/tree.ejs", { rootPath: rootPath }) %></aside>
     <main><%- include("./partials/main.ejs"); %></main>
   </body>
 </html>

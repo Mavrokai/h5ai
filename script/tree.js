@@ -1,10 +1,36 @@
 function fetchTree(path) {
-  fetch(`/api/tree?path=${encodeURIComponent(path)}`)
-    .then((res) => res.json())
-    .then((treeData) => renderTree(treeData));
+  return fetch(`/api/tree?path=${encodeURIComponent(path)}`).then((res) =>
+    res.json()
+  );
 }
 
-function createTreeElement(node) {
+function getOpenFolders() {
+  try {
+    return JSON.parse(localStorage.getItem("openTreeFolders") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setOpenFolders(list) {
+  localStorage.setItem("openTreeFolders", JSON.stringify(list));
+}
+
+function isFolderOpen(path) {
+  return getOpenFolders().includes(path);
+}
+
+function toggleFolderOpen(path, open) {
+  let list = getOpenFolders();
+  if (open) {
+    if (!list.includes(path)) list.push(path);
+  } else {
+    list = list.filter((p) => p !== path);
+  }
+  setOpenFolders(list);
+}
+
+function createTreeElement(node, parentPath = "") {
   const li = document.createElement("li");
   li.classList.add("tree-item");
 
@@ -29,19 +55,57 @@ function createTreeElement(node) {
     const ul = document.createElement("ul");
     ul.classList.add("tree-children");
     ul.style.display = "none";
-    if (node.children) {
-      node.children.forEach((child) => {
-        ul.appendChild(createTreeElement(child));
-      });
+    li.appendChild(ul);
+
+    let loaded = false;
+    const fullPath = parentPath ? parentPath + "/" + node.name : node.name;
+
+    async function openFolder() {
+      ul.style.display = "block";
+      toggleFolderOpen(fullPath, true);
+      if (!loaded) {
+        ul.innerHTML = '<li class="tree-item">Chargement...</li>';
+        const children = await fetchTree(fullPath);
+        ul.innerHTML = "";
+        if (Array.isArray(children)) {
+          children.forEach((child) => {
+            ul.appendChild(createTreeElement(child, fullPath));
+          });
+        }
+        loaded = true;
+
+        getOpenFolders().forEach((openPath) => {
+          if (openPath.startsWith(fullPath + "/")) {
+            const subFolder = openPath.slice(fullPath.length + 1).split("/")[0];
+            const subLi = Array.from(ul.children).find(
+              (el) =>
+                el.querySelector &&
+                el.querySelector(".tree-folder") &&
+                el.querySelector(".tree-folder").nextSibling.textContent ===
+                  subFolder
+            );
+            if (subLi) {
+              const clickEvent = new Event("click");
+              subLi.querySelector("div").dispatchEvent(clickEvent);
+            }
+          }
+        });
+      }
     }
-    folderHeader.addEventListener("click", () => {
+
+    folderHeader.addEventListener("click", async (e) => {
+      e.stopPropagation();
       if (ul.style.display === "none") {
-        ul.style.display = "block";
+        await openFolder();
       } else {
         ul.style.display = "none";
+        toggleFolderOpen(fullPath, false);
       }
     });
-    li.appendChild(ul);
+
+    if (isFolderOpen(fullPath)) {
+      setTimeout(() => openFolder(), 0);
+    }
   } else {
     const icon = document.createElement("span");
     icon.classList.add("tree-icon", "tree-file");
@@ -55,17 +119,21 @@ function createTreeElement(node) {
   return li;
 }
 
-function renderTree(treeData) {
+function renderTree(treeData, parentPath = "") {
   const container = document.getElementById("tree-container");
   container.innerHTML = "";
   const ul = document.createElement("ul");
   ul.classList.add("tree-list");
-  treeData.forEach((node) => {
-    ul.appendChild(createTreeElement(node));
-  });
+  for (let i = 0; i < treeData.length; i++) {
+    ul.appendChild(createTreeElement(treeData[i], parentPath));
+  }
   container.appendChild(ul);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetchTree(window.rootPath || "");
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("tree-container");
+  container.innerHTML =
+    '<div style="padding:10px; color:#888;">Chargement...</div>';
+  const treeData = await fetchTree("");
+  renderTree(treeData, "");
 });

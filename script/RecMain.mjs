@@ -23,7 +23,9 @@ function listDirectory(absPath, relPath, callback) {
         isFile: entry.isFile(),
         size: stats.size,
         formattedSize: entry.isDirectory() ? "-" : formatFileSize(stats.size),
-        extension: entry.isDirectory() ? "" : path.extname(entry.name).toLowerCase(),
+        extension: entry.isDirectory()
+          ? ""
+          : path.extname(entry.name).toLowerCase(),
       };
     });
     callback(null, files);
@@ -53,6 +55,7 @@ function handlePath(req, res, rootPath, relPath) {
           files,
           currentPath: relPath === "" ? "/" : "/" + relPath,
           formatFileSize,
+          rootPath: rootPath,
         });
       });
     } else {
@@ -66,20 +69,22 @@ function getTree(rootPath, relPath, callback) {
   fs.readdir(absPath, { withFileTypes: true }, (err, entries) => {
     if (err) return callback(err);
     let results = [];
-    let pending = entries.length;
-    if (!pending) return callback(null, results);
-    entries.forEach((entry) => {
+    let i = 0;
+    function next() {
+      if (i >= entries.length) return callback(null, results);
+      const entry = entries[i++];
       const childRelPath = path.join(relPath, entry.name);
       if (entry.isDirectory()) {
         getTree(rootPath, childRelPath, (err, children) => {
           results.push({ name: entry.name, isDirectory: true, children });
-          if (!--pending) callback(null, results);
+          next();
         });
       } else {
         results.push({ name: entry.name, isDirectory: false });
-        if (!--pending) callback(null, results);
+        next();
       }
-    });
+    }
+    next();
   });
 }
 

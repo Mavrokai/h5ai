@@ -20,7 +20,10 @@ app.set("view engine", "ejs");
 app.get("/api/tree", (req, res) => {
   const relPath = req.query.path || "";
   RecMain.getTree(rootPath, relPath, (err, tree) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error("Erreur /api/tree :", err);
+      return res.status(500).json({ error: err.message });
+    }
     res.json(tree);
   });
 });
