@@ -1,3 +1,17 @@
+<div class="header-container-searcher">
+  <form id="search-form">
+    <input
+      type="text"
+      id="search-input"
+      class="search-input"
+      placeholder="Rechercher un fichier ou dossier..."
+      name="q"
+      required
+    />
+    <button type="submit" class="search-button">Rechercher</button>
+  </form>
+</div>
+
 <div class="explorer-container">
   <section class="current-path">
     <div>
@@ -8,52 +22,47 @@
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+        <th class="icon-cell">Type</th>
         <th>Nom</th>
-        <th>Taille</th>
+        <th class="size-cell">Taille</th>
       </tr>
     </thead>
     <tbody>
       <% files.forEach(function(item) { %>
-        <tr>
-<td class="icon-cell">
-  <% if (item.isDirectory) { %>
-    <a href="<%= item.path %>">
-      <iconify-icon icon="mdi:folder" width="24"></iconify-icon>
-    </a>
-  <% } else { %>
-    <%
-      const ext = item.extension.toLowerCase();
+      <tr>
+        <td class="icon-cell">
+          <% if (item.isDirectory) { %>
+          <a href="<%= item.path %>">
+            <iconify-icon icon="mdi:folder" width="24"></iconify-icon>
+          </a>
+          <% } else { %> <% const ext = item.extension.toLowerCase(); let icon =
+          'mdi:file-outline'; if (ext === '.pdf') icon = 'mdi:file-pdf-box';
+          else if (ext === '.doc' || ext === '.docx') icon =
+          'mdi:file-word-box'; else if (ext === '.xls' || ext === '.xlsx') icon
+          = 'mdi:file-excel-box'; else if (ext === '.ppt' || ext === '.pptx')
+          icon = 'mdi:file-powerpoint-box'; else if (ext === '.html') icon =
+          'vscode-icons:file-type-html'; else if (ext === '.css') icon =
+          'vscode-icons:file-type-css'; else if (ext === '.js') icon =
+          'vscode-icons:file-type-js-official'; else if (['.jpg', '.jpeg',
+          '.png', '.gif', '.svg'].includes(ext)) icon = 'mdi:file-image'; else
+          if (['.mp4', '.mov', '.webm'].includes(ext)) icon = 'mdi:file-video';
+          else if (['.mp3', '.wav'].includes(ext)) icon = 'mdi:file-music'; else
+          if (['.zip', '.rar', '.7z'].includes(ext)) icon = 'mdi:folder-zip'; %>
 
-      let icon = 'mdi:file-outline';
+          <a href="<%= item.path %>">
+            <iconify-icon icon="<%= icon %>" width="24"></iconify-icon>
+          </a>
+          <% } %>
+        </td>
 
-      if (ext === '.pdf') icon = 'mdi:file-pdf-box';
-      else if (ext === '.doc' || ext === '.docx') icon = 'mdi:file-word-box';
-      else if (ext === '.xls' || ext === '.xlsx') icon = 'mdi:file-excel-box';
-      else if (ext === '.ppt' || ext === '.pptx') icon = 'mdi:file-powerpoint-box';
-      else if (ext === '.html') icon = 'vscode-icons:file-type-html';
-      else if (ext === '.css') icon = 'vscode-icons:file-type-css';
-      else if (ext === '.js') icon = 'vscode-icons:file-type-js-official';
-      else if (['.jpg', '.jpeg', '.png', '.gif', '.svg'].includes(ext)) icon = 'mdi:file-image';
-      else if (['.mp4', '.mov', '.webm'].includes(ext)) icon = 'mdi:file-video';
-      else if (['.mp3', '.wav'].includes(ext)) icon = 'mdi:file-music';
-      else if (['.zip', '.rar', '.7z'].includes(ext)) icon = 'mdi:folder-zip';
-    %>
-
-    <a href="<%= item.path %>">
-      <iconify-icon icon="<%= icon %>" width="24"></iconify-icon>
-    </a>
-  <% } %>
-</td>
-
-          <td class="name-cell">
-            <a href="<%= item.path %>"><%= item.name %></a>
-          </td>
-          <td class="size-cell">
-            <%= item.formattedSize %>
-          </td>
-        </tr>
+        <td class="name-cell">
+          <a href="<%= item.path %>"><%= item.name %></a>
+        </td>
+        <td class="size-cell"><%= item.formattedSize %></td>
+      </tr>
       <% }); %>
     </tbody>
   </table>
 </div>
+
+<script src="/script/search.js"></script>

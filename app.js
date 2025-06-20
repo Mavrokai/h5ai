@@ -32,9 +32,45 @@ app.get("/", (req, res) => {
   RecMain.handlePath(req, res, rootPath, "");
 });
 
+app.get("/search", (req, res) => {
+  const q = req.query.q || "";
+  if (!q) return res.json([]);
+  try {
+    const results = searchFiles(rootPath, q);
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get(/^(.+)$/, (req, res) => {
   RecMain.handlePath(req, res, rootPath, req.params[0] || "");
 });
+
+function searchFiles(dir, query, results = [], relBase = "") {
+  const items = fs.readdirSync(dir);
+  for (const name of items) {
+    const absPath = path.join(dir, name);
+    const relPath = path.join(relBase, name);
+    let stat;
+    try {
+      stat = fs.statSync(absPath);
+    } catch (e) {
+      continue;
+    }
+    if (name.toLowerCase().includes(query.toLowerCase())) {
+      results.push({
+        name: name,
+        path: relPath,
+        isDirectory: stat.isDirectory(),
+      });
+    }
+    if (stat.isDirectory()) {
+      searchFiles(absPath, query, results, relPath);
+    }
+  }
+  return results;
+}
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
