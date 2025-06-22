@@ -30,6 +30,30 @@ function toggleFolderOpen(path, open) {
   setOpenFolders(list);
 }
 
+function getIconForExtension(extension) {
+  extension = extension.toLowerCase();
+  if (extension === ".pdf") return "mdi:file-pdf-box";
+  if ([".doc", ".docx"].includes(extension)) return "mdi:file-word-box";
+  if ([".xls", ".xlsx"].includes(extension)) return "mdi:file-excel-box";
+  if ([".ppt", ".pptx"].includes(extension)) return "mdi:file-powerpoint-box";
+  if (extension === ".html") return "vscode-icons:file-type-html";
+  if (extension === ".css") return "vscode-icons:file-type-css";
+  if (extension === ".js") return "vscode-icons:file-type-js-official";
+  if ([".jpg", ".jpeg", ".png", ".gif", ".svg"].includes(extension)) return "mdi:file-image";
+  if ([".mp4", ".mov", ".webm"].includes(extension)) return "mdi:file-video";
+  if ([".mp3", ".wav"].includes(extension)) return "mdi:file-music";
+  if ([".zip", ".rar", ".7z"].includes(extension)) return "mdi:folder-zip";
+  return "mdi:file-outline";
+}
+
+function createIconElement(iconName) {
+  const icon = document.createElement("iconify-icon");
+  icon.setAttribute("icon", iconName);
+  icon.setAttribute("width", "20");
+  icon.setAttribute("height", "20");
+  return icon;
+}
+
 function createTreeElement(node, parentPath = "") {
   const li = document.createElement("li");
   li.classList.add("tree-item");
@@ -41,9 +65,8 @@ function createTreeElement(node, parentPath = "") {
     folderHeader.style.gap = "4px";
     folderHeader.style.cursor = "pointer";
 
-    const icon = document.createElement("span");
+    const icon = createIconElement("mdi:folder");
     icon.classList.add("tree-icon", "tree-folder");
-    icon.textContent = "📁";
     folderHeader.appendChild(icon);
 
     const span = document.createElement("span");
@@ -107,15 +130,17 @@ function createTreeElement(node, parentPath = "") {
       setTimeout(() => openFolder(), 0);
     }
   } else {
-    const icon = document.createElement("span");
+    const ext = node.name.includes(".") ? "." + node.name.split(".").pop() : "";
+    const iconName = getIconForExtension(ext);
+    const icon = createIconElement(iconName);
     icon.classList.add("tree-icon", "tree-file");
-    icon.textContent = "📄";
     li.appendChild(icon);
 
     const span = document.createElement("span");
     span.textContent = node.name;
     li.appendChild(span);
   }
+
   return li;
 }
 
